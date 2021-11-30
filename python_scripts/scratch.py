@@ -33,23 +33,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-import re
-import pathlib
-
-import loaders
-
-p = pathlib.Path('.')
-print(p.parent)
-
-INPUT_FILE = p.parent / "inputs/sample_input.txt"
-INPUT_FILE = p.parent / "inputs/day01.txt"
-PATTERN = "(?P<min>\d+)-(?P<max>\d+) (?P<char>\w): (?P<pwd>\w+)"
-PATTERN2 = "(?P<color1>[a-z ]+) bags contain (?P<contents>[0-9a-z, ]+)\."
-
-def main():
-    rules = loaders.get_dict_iter(INPUT_FILE, PATTERN2)
-    for r in rules:
-        print(r)
-
-if __name__ == '__main__':
-    main()
