@@ -1,12 +1,10 @@
-import pathlib
-
 import loaders
 
-p = pathlib.Path('.')
-INPUT_FILE = p.parent / "inputs/day01.txt"
+DAY = 0
 
 def main():
-	text = loaders.get_text(INPUT_FILE)
+	input_file = loaders.input_filename(DAY, use_example=True)
+	text = loaders.get_text(input_file)
 	print(text)
 
 if __name__ == '__main__':
