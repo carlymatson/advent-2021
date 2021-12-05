@@ -8,5 +8,5 @@ adv () {
     touch $infileex
     touch $dayfile
     cat "python_scripts/template.py" > $dayfile
-    sed -i '' "s/01/${day}/g" $dayfile
+    sed -i '' "s/DAY = 0/DAY = $1/g" $dayfile
 }

@@ -1,11 +1,6 @@
-import pathlib
-
 import loaders
 
-p = pathlib.Path(".")
-INPUT_FILE = p.parent / "inputs/day03.txt"
-EXAMPLE_INPUT = p.parent / "inputs/day03_example.txt"
-
+DAY = 3
 
 def get_digit(arrays, digit, use_most_common=True):
     halfway = len(arrays) / 2.0
@@ -55,6 +50,7 @@ def to_string(binary_array):
 
 def main():
     ## Load input. ##
+    INPUT_FILE = loaders.input_filename(DAY, use_example=False)
     input_strings = loaders.get_text(INPUT_FILE).split("\n")
     binary_strings = [[int(b) for b in bs] for bs in input_strings]
 

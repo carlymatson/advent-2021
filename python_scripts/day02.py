@@ -1,10 +1,6 @@
-import pathlib
-
 import loaders
 
-p = pathlib.Path('.')
-INPUT_FILE = p.parent / "inputs/day02.txt"
-PATTERN = "(?P<dir>\w+) (?P<amt>\d+)"
+DAY = 2
 
 class Submarine:
     def __init__(self):
@@ -32,7 +28,9 @@ class Submarine:
 
 
 def main():
-    instructs = loaders.get_dict_iter(INPUT_FILE, PATTERN)
+    input_file = loaders.input_filename(DAY, use_example=False)
+    pattern = '(?P<dir>\w+) (?P<amt>\d+)'
+    instructs = loaders.get_dict_iter(input_file, pattern)
     sub = Submarine()
     for inst in instructs:
         dir, amt = inst["dir"], int(inst["amt"])
