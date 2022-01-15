@@ -67,19 +67,28 @@ class Grid:
 
     def find_basin(self, x, y):
         basin = set()
-        options = [nb for nb in self.get_neighbors(x, y) if self.get(*nb) < 9]
-        frontier = set(options)
+        # frontier = set(options)
+        frontier = [(x, y)]
         while frontier:
-            point = sorted(frontier, key=lambda pt: self.get(*pt)).pop(0)
-            # expand point
+            frontier.sort(key=lambda pt: self.get(*pt))
+            point = frontier.pop(0)
+            neighbors = [nb for nb in self.get_neighbors(*point) if self.get(*nb) < 9]
+            for nb in neighbors:
+                if nb not in basin:
+                    basin.add(nb)
+                    frontier.append(nb)
+        return basin
 
     def score(self):
         score = 0
+        basin_sizes = []
         for y in range(*self.get_bounds("y")):
             for x in range(*self.get_bounds("x")):
                 if self.is_local_minimum(x, y):
                     score += self.get(x, y) + 1
-        return score
+                    basin = self.find_basin(x, y)
+                    basin_sizes.append(len(basin))
+        return score, basin_sizes
 
     def get_icon(self, x, y):
         height = self.get(x, y)
@@ -121,10 +130,18 @@ def load_input():
     return Grid(nested_array)
 
 
-def main():
+def main(pretty_print=True):
     grid = load_input()
-    print_grid(grid)
-    print(f"Score: {grid.score()}")
+    if pretty_print:
+        print_grid(grid)
+    risk_level_sum, basin_sizes = grid.score()
+    ### Part 1 ###
+    print(f"Sum of all risk levels: {risk_level_sum}")
+    ### Part 2 ###
+    basin_sizes.sort(reverse=True)
+    top_3 = basin_sizes[:3]
+    top_3_product = top_3[0] * top_3[1] * top_3[2]
+    print(f"Product of top 3 basin sizes: {top_3_product}")
 
 
 if __name__ == "__main__":
