@@ -6,7 +6,6 @@ def load_input(example=None):
     path = Path(__file__).parent / file_name
     text = path.read_text()
     grid = text.split("\n")
-    print(len(grid), len(grid[0]))
     return grid
 
 
@@ -71,25 +70,29 @@ class Seafloor:
         if axis == "y":
             return 0, self.height
 
-    def move_herd(self):  # FIXME Point addition won't work, so this won't work
+    def move_herds(self):  # FIXME Point addition won't work, so this won't work
+        num_moved = 0
         # East
         dir = self.WrapPoint(1, 0)
-        new_locs = set(
-            [
-                point + dir if not self.is_occupied(point + dir) else point
-                for point in self.east_herd
-            ]
-        )
+        new_locs = set()
+        for point in self.east_herd:
+            if not self.is_occupied(point + dir):
+                new_locs.add(point + dir)
+                num_moved += 1
+            else:
+                new_locs.add(point)
         self.east_herd = new_locs
         # South
         dir = self.WrapPoint(0, 1)
-        new_locs = set(
-            [
-                point + dir if not self.is_occupied(point + dir) else point
-                for point in self.south_herd
-            ]
-        )
+        new_locs = set()
+        for point in self.south_herd:
+            if not self.is_occupied(point + dir):
+                new_locs.add(point + dir)
+                num_moved += 1
+            else:
+                new_locs.add(point)
         self.south_herd = new_locs
+        return num_moved
 
     def __repr__(self):
         icons = [
@@ -101,23 +104,23 @@ class Seafloor:
 def main():
     input = load_input(example=None)
     sf = Seafloor(input)
-    prev_state = ""
+    num_moved = 1
     turns = 0
-    while str(sf) != prev_state:
+    while num_moved > 0:
         if False:
             print(f"After {turns} steps:")
             print(sf)
             print("")
-        prev_state = str(sf)
-        sf.move_herd()
+        num_moved = sf.move_herds()
         turns += 1
         if turns % 10 == 0:
-            print(".")
+            print(".", end="", flush=True)
         if turns > 1000:
             print("AAAAAH!")
             break
+    print("")
     print(sf)
-    print(turns)
+    print(f"Number of turns until gridlock: {turns}")
 
 
 if __name__ == "__main__":
